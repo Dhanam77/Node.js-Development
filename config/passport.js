@@ -17,12 +17,13 @@ passport.use(new GoogleStrategy({
         process.nextTick(function () {
 
             // try to find the user based on their google id
-            User.findOne({ 'google.id': profile.id }, function (err, user) {
+            User.findOne({ email: profile.emails[0].value}, function (err, user) {
                 if (err)
                     return done(err);
 
                 if (user) {
 
+                    //TODO: CHECK IF USER ALREADY REGISTERED BEFORE, THEN LOGIN AUTOMATICALLY OR TELL HIM TO LOGIN?
                     // if a user is found, log them in
                     return done(null, user);
                 } else {
