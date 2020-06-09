@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
 
-//Only Email and Password are necessary. 
+//Only Email and Password are necessary for local auth.
+//Only phone no required for otp auth
+ 
 
 const userSchema = new mongoose.Schema({
     name: {

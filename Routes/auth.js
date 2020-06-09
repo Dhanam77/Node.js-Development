@@ -42,13 +42,17 @@ router.get('/otp/verify', async(req, res) => {
             to: req.body.phoneNumber,
             code: req.body.code
         })
-        .then((data) => {
+        .then(async (data) => {
             const user = new User({
                 phoneNumber: req.body.phoneNumber
             })
 
-            
-            user.save()
+            //Check if User is already registered
+            const oldUser = await User.findOne({phoneNumber:req.body.phoneNumber})
+
+            //If not, make a new user and send old user id
+            if(!oldUser){
+                user.save()
                 .then((savedUser) => {
                     res.send({ user: user._id });
 
@@ -57,6 +61,12 @@ router.get('/otp/verify', async(req, res) => {
                     console.log("Error in registering user");
                 });
 
+            }
+            //else send old user id
+            else{
+                res.send({user: oldUser._id});
+            }
+            
         }).catch(err => {
         res.status(400).send('Something is wrong..');
     })

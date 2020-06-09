@@ -26,6 +26,7 @@ dotenv.config();
 
 //To Routes Folder
 const authRoute = require('./Routes/auth');
+const userInfoRoute = require('./Routes/userinfo');
 const userRoute = require('./Routes/users');
 const diseaseRoute = require('./Routes/Diseases');
 
@@ -40,6 +41,7 @@ mongoose.connect(process.env.DB_CONNECT,
 //Will Require /api/auth before @EG signup 
 app.use('/api/auth/', authRoute);
 app.use('/api', userRoute);
+app.use('/api', userInfoRoute);
 app.use('/api', diseaseRoute);
 
 
