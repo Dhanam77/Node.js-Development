@@ -7,12 +7,14 @@ exports.get_userinfo =  async(req, res) => {
     const gender = user.gender;
     const age = user.age;
 
-    const userinfo = await UserInfo.findOne().exec();
+   // const userinfo = await UserInfo.findOne().exec();
+
+
 
     
 
 
-};
+
 
     res.json(userinfo);
 
