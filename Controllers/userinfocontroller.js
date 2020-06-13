@@ -9,14 +9,7 @@ exports.get_userinfo =  async(req, res) => {
 
    // const userinfo = await UserInfo.findOne().exec();
 
-
-
-    
-
-
-
-
-    res.json(userinfo);
+   res.json(userinfo);
 
 };
 
