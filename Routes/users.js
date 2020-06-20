@@ -23,5 +23,7 @@ router.post('/user/medical/:id', UserController.set_medical_condition);
 //Get medical conditions of user
 router.get('/user/medical/:id', UserController.get_medical_conditions);
 
+//Get user circle
+router.get('/user/medical/circle/:id', UserController.get_user_circle);
 
 module.exports = router;

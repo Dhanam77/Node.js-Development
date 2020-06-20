@@ -79,6 +79,7 @@ exports.set_medical_condition = async(req, res) => {
 
 }
 
+//Get user's medical conditions
 exports.get_medical_conditions = async(req, res) =>{
     await MedicalCondition.find({user_id:req.params.id, is_user:true}).exec()
     .then(user => {
@@ -86,3 +87,24 @@ exports.get_medical_conditions = async(req, res) =>{
     }).catch( err => res.status(400).send('Error in getting medical conditions ' + err));
 
 }
+
+// Get user's circle
+exports.get_user_circle = async(req, res) =>{
+
+    const name = req.body.name;
+    const type = req.body.type;
+
+    if(name && type){
+        await MedicalCondition.find({user_id:req.params.id, is_user:false, name:name, type:type}).exec()
+        .then(circle => res.status(200).json(circle))
+        .catch(err => res.status(400).send("Can't fetch " + err));
+    }
+    else{
+        await MedicalCondition.find({user_id:req.params.id, is_user:false}).exec()
+        .then(circle => res.status(200).json(circle))
+        .catch(err => res.status(400).send("Can't fetch " + err));
+    }
+
+    
+}
+
