@@ -20,5 +20,8 @@ router.post('/user/profile/:id', UserController.edit_profile);
 //Set medical conditions of the user
 router.post('/user/medical/:id', UserController.set_medical_condition);
 
+//Get medical conditions of user
+router.get('/user/medical/:id', UserController.get_medical_conditions);
+
 
 module.exports = router;

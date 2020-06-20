@@ -59,6 +59,7 @@ exports.set_medical_condition = async(req, res) => {
     const condition = new MedicalCondition({
         user_id : req.params.id,
         is_user : req.body.is_user,
+        type:req.body.type,
         name: req.body.name,
         age: req.body.age,
         gender:req.body.gender,
@@ -75,5 +76,13 @@ exports.set_medical_condition = async(req, res) => {
         res.status(400).send(err);
         console.log("Error in saving medical condition " + err);
     }
+
+}
+
+exports.get_medical_conditions = async(req, res) =>{
+    await MedicalCondition.find({user_id:req.params.id, is_user:true}).exec()
+    .then(user => {
+        res.status(200).send(user)
+    }).catch( err => res.status(400).send('Error in getting medical conditions ' + err));
 
 }

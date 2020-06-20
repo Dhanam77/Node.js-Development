@@ -10,6 +10,10 @@ const medicalConditionSchema = new Schema({
         type:Boolean,
         required : true
     },
+    type: {
+        type:String,
+        required: true
+    },
     name: {
         type:String
     },
