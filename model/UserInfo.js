@@ -3,8 +3,11 @@ const mongoose = require('mongoose');
 
 const userInfoSchema = new mongoose.Schema({
 
-    questions:{
+    basic:{
         type: Array
+    },
+    medical:{
+        type:Array
     }
 
 

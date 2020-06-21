@@ -22,15 +22,16 @@ exports.edit_profile = async(req, res) => {
 
     const name = req.body.name;
     const age = req.body.age;
-
+/*
     if(name && age){
         const editedUser = await User.findOneAndUpdate({_id:req.params.id}, {$set:{name:req.body.name, age:req.body.age}});
     }
-    else if(name){
+    */
+    if(name){
         const editedUser = await User.findOneAndUpdate({_id:req.params.id}, {$set:{name:req.body.name}});
 
     }
-    else if(age){
+    if(age){
         const editedUser = await User.findOneAndUpdate({_id:req.params.id}, {$set:{age:req.body.age}});
 
     }
@@ -38,6 +39,30 @@ exports.edit_profile = async(req, res) => {
     res.status(200).send("User updated successfully");
 
 };
+
+
+//Save user data like name, age, gender 
+//This endpoint must only be used to add data and not update it
+//TO update, use edit profile api 
+exports.save_user_data = async(req, res) => {
+    const name = req.body.name;
+    const age = req.body.age;
+    const gender = req.body.gender;
+
+    if(name){
+        User.findOneAndUpdate({_id:req.params.id}, {$set:{name:name}}).exec()
+    }
+    if(age){
+        User.findOneAndUpdate({_id:req.params.id}, {$set:{age:age}}).exec()
+    }
+    if(gender){
+        User.findOneAndUpdate({_id:req.params.id}, {$set:{gender:gender}}).exec()
+    }
+
+    res.status(200).send("User data saved successfully");
+
+}
+
 
 
 //Get a specific profile

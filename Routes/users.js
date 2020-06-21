@@ -14,10 +14,12 @@ router.get('/user/profile/:id', UserController.get_profile);
 
 
 //Edit the profile of specific user
-router.post('/user/profile/:id', UserController.edit_profile);
+router.post('/user/profile/edit/:id', UserController.edit_profile);
 
+//Save User data after getting data from asking basic questions in pre-diagnosis questions
+router.post('/user/profile/save/:id', UserController.save_user_data);
 
-//Set medical conditions of the user
+//Set medical conditions of the user after getting data from asking medical questions in pre-diagnosis questions
 router.post('/user/medical/:id', UserController.set_medical_condition);
 
 //Get medical conditions of user

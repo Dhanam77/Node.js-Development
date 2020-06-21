@@ -26,7 +26,6 @@ dotenv.config();
 
 //To Routes Folder
 const authRoute = require('./Routes/auth');
-const userInfoRoute = require('./Routes/users');
 const userRoute = require('./Routes/users');
 const diseaseRoute = require('./Routes/Diseases');
 
