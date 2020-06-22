@@ -123,7 +123,7 @@ exports.verify_otp = async(req, res) => {
             //Check if User is already registered
             const oldUser = await User.findOne({phoneNumber:req.body.phoneNumber})
             const token = jwt.sign({ _id: oldUser._id }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
-            const refreshToken = jwt.sign({_id:oldUser}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
+            const refreshToken = jwt.sign({_id:oldUser._id}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
 
             //If not, make a new user and send old user id
             if(!oldUser){
