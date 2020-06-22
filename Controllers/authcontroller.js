@@ -7,6 +7,11 @@ const jwt = require('jsonwebtoken');
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
 
+const accessTokenExpiresIn = 300;   //5 mins
+const refreshTokenExpiresIn = 24*60*60*30   //One month
+
+
+
 //Signing up the user
 exports.signup_user = async (req, res) => {
 
@@ -41,10 +46,12 @@ exports.signup_user = async (req, res) => {
 
     try {
         const saveduser = await user.save();
-        const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {expiresIn:60*60*24});
+        const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
+        const refreshToken = jwt.sign({_id:user._id }, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
+
       //  res.header('auth-token', token).send(token);
 
-        res.status(200).send({user: user._id,token: token});
+        res.status(200).send({user: user._id,token: token, refreshToken: refreshToken});
 
     } catch (err) {
         res.status(400).send(err);
@@ -73,8 +80,12 @@ exports.login_user = async (req, res) => {
     };
 
     //Create and assign JWT Tokens
-    const token = jwt.sign({ _id: emailExist._id }, process.env.TOKEN_SECRET, {expiresIn:60*60*24});
-    res.header('auth-token', token).send(token);
+    const token = jwt.sign({ _id: emailExist._id }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
+    const refreshToken = jwt.sign({_id:emailExist._id}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
+
+    res.status(200).send({user: emailExist._id, token: token, refreshToken: refreshToken});
+
+    //res.header('auth-token', token).send(token);
 
     // res.send('Logged In');
 };
@@ -87,7 +98,7 @@ exports.login_otp = (req, res) => {
     client.verify
         .services(process.env.SERVICE_ID)
         .verifications
-        .create({   //Assuming you're adding +91 at the start while sending number
+        .create({   //Assuming +91 is already added at the start while sending number
             to: req.body.phoneNumber,
             channel: req.body.channel
         })
@@ -111,13 +122,14 @@ exports.verify_otp = async(req, res) => {
 
             //Check if User is already registered
             const oldUser = await User.findOne({phoneNumber:req.body.phoneNumber})
-            const token = jwt.sign({ _id: oldUser._id }, process.env.TOKEN_SECRET, {expiresIn:60*60*24});
+            const token = jwt.sign({ _id: oldUser._id }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
+            const refreshToken = jwt.sign({_id:oldUser}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
 
             //If not, make a new user and send old user id
             if(!oldUser){
                 user.save()
                 .then((savedUser) => {
-                    res.send({ user: user._id, token:token});
+                    res.send({ user: user._id, token:token, refreshToken:refreshToken});
 
                 }).catch(err => {
                     res.status(400).send(err);
@@ -127,7 +139,7 @@ exports.verify_otp = async(req, res) => {
             }
             //else send old user id
             else{
-                res.send({user: oldUser._id, token:token});
+                res.send({user: oldUser._id, token:token, refreshToken:refreshToken});
             }
             
         }).catch(err => {

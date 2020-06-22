@@ -7,7 +7,7 @@ const UserController = require('../Controllers/usercontroller');
 router.get('/users',verify, UserController.get_user);
 
 //Get Pre-Diagnosis Questions 
-router.get('/user/info/:id', UserController.get_userinfo);
+router.get('/user/info/:id',  UserController.get_userinfo);
 
 //Get profile information of specific user
 router.get('/user/profile/:id', UserController.get_profile);
