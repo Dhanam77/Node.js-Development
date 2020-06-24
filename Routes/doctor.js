@@ -28,7 +28,7 @@ router.post('/doctor/:id', async(req, res) => {
     
         await User.findOneAndUpdate({_id:id}, {$set:{type:doctor}}, {upsert:true}).exec()
         .then(data => {
-            res.status(200).send('done');
+            res.status(200).send('Upgraded user to doctor');
         }).catch(err => {
             res.status(400).send('Error '  + err);
         });

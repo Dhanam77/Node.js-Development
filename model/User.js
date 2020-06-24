@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         min:6
 
     },
+    type:{
+        type: String,
+        required:true
+    },
     state: {
         type: String
     },
