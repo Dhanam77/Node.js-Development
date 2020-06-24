@@ -18,8 +18,7 @@ const userSchema = new mongoose.Schema({
 
     },
     type:{
-        type: String,
-        required:true
+        type: String
     },
     state: {
         type: String

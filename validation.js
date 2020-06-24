@@ -15,6 +15,7 @@ const registerValidation = (data) => {
         name: Joi.string(),
         email: Joi.string().min(6).required().email(),
         password: Joi.string().min(6),
+        type:Joi.string(),
         state: Joi.string(),
         city: Joi.string()
     });

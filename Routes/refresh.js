@@ -2,6 +2,7 @@ const jwt =  require('jsonwebtoken');
 const router = require('express').Router();
 const accessTokenExpiresIn = 300;
 
+
 //This endpoint is used to get new access token after it has expired
 router.get('/refresh', (req, res) => {
     user = req.body.user_id

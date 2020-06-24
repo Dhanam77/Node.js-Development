@@ -2,7 +2,7 @@ const { registerValidation, loginValidation } = require('../validation');
 const User = require('../model/User.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const RefreshToken = require('../model/RefreshToken');
 
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
@@ -39,6 +39,7 @@ exports.signup_user = async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: hashPassword,
+        type:req.body.type,
         state: req.body.state,
         city:req.body.city
 
@@ -48,6 +49,8 @@ exports.signup_user = async (req, res) => {
         const saveduser = await user.save();
         const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
         const refreshToken = jwt.sign({_id:user._id }, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
+        saveToken(refreshToken, user._id);
+
 
       //  res.header('auth-token', token).send(token);
 
@@ -82,6 +85,10 @@ exports.login_user = async (req, res) => {
     //Create and assign JWT Tokens
     const token = jwt.sign({ _id: emailExist._id }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
     const refreshToken = jwt.sign({_id:emailExist._id}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
+
+    saveToken(refreshToken, emailExist._id);
+
+
 
     res.status(200).send({user: emailExist._id, token: token, refreshToken: refreshToken});
 
@@ -125,6 +132,7 @@ exports.verify_otp = async(req, res) => {
             const token = jwt.sign({ _id: oldUser._id }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
             const refreshToken = jwt.sign({_id:oldUser._id}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
 
+            saveToken(refreshToken, oldUser._id);
             //If not, make a new user and send old user id
             if(!oldUser){
                 user.save()
@@ -147,3 +155,11 @@ exports.verify_otp = async(req, res) => {
     })
 }; 
 
+async function saveToken(refreshToken, user_id){
+    const token = new RefreshToken({
+        user_id : user_id,
+        token:refreshToken
+    });
+    await token.save();
+
+}
