@@ -141,7 +141,7 @@ exports.verify_otp = async(req, res) => {
 
                 }).catch(err => {
                     res.status(400).send(err);
-                    console.log("Error in registering user");
+                    console.log("Error in registering user " + err);
                 });
 
             }
@@ -151,15 +151,48 @@ exports.verify_otp = async(req, res) => {
             }
             
         }).catch(err => {
-        res.status(400).send('Something is wrong..');
+        res.status(400).send('Something is wrong..' + err);
     })
 }; 
 
+
+exports.logout_user = async(req,res) => {
+  
+    const id = req.params.id;
+
+    try{
+        await RefreshToken.findOneAndDelete({user_id:id});
+        res.status(200).send('Successfully logged out');
+    }
+    catch(err){
+        res.status(400).send('Error in logging user out ' + err);
+    }
+    
+
+};
+
 async function saveToken(refreshToken, user_id){
+
+    //Create a date to expire the refresh token
+    const expireAt = 'June 25, 2020 13:16:00'
+
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+ //   console.log(today + " " + year + " " + month + " "+ day);
+    const date = new Date(year, month, day, 00, 00, 00);
+    console.log(date);
     const token = new RefreshToken({
+        expireAt: date,
         user_id : user_id,
         token:refreshToken
     });
-    await token.save();
+    try{
+        await token.save();
+    }
+    catch(err){
+        res.status(400).send('Error in saving token ' + err);
+    }
 
 }
