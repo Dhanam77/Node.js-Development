@@ -168,19 +168,15 @@ exports.logout_user = async(req,res) => {
         res.status(400).send('Error in logging user out ' + err);
     }
     
-
 };
 
 async function saveToken(refreshToken, user_id){
 
     //Create a date to expire the refresh token
-    const expireAt = 'June 25, 2020 13:16:00'
-
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
     const day = today.getDate();
- //   console.log(today + " " + year + " " + month + " "+ day);
     const date = new Date(year, month, day, 00, 00, 00);
     console.log(date);
     const token = new RefreshToken({

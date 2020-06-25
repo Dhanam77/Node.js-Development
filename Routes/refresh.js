@@ -1,28 +1,29 @@
-const jwt =  require('jsonwebtoken');
 const router = require('express').Router();
-const accessTokenExpiresIn = 300;
-
+const RefreshController = require('../Controllers/refreshcontroller');
 
 //This endpoint is used to get new access token after it has expired
-router.get('/refresh', (req, res) => {
-    user = req.body.user_id
-    refreshToken = req.body.refreshToken;
+router.get('/refresh', RefreshController.get_access_token);
+
+
+
+/*
+router.get('/refresh/reject', async(req,res) =>{
+
+    const user = req.body.user;
+    
     try{
-        const verified = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-        if(verified){
-            const token = jwt.sign({ user_id: user }, process.env.TOKEN_SECRET, {expiresIn:accessTokenExpiresIn});
-            res.status(200).send({token:token});
-            next();
-        }
-        else{
-            res.status(400).send('Invalid ' + err);
-        }
+        await RefreshToken.remove({user_id:user});
+        res.status(200).send('Rejected the refresh token successfully');
 
     }
-    catch (err) {
-        res.status(400).send('Invalid Refresh Token ' + err);
+    catch(err){
+        res.status(400).send('Error rejecting the refresh token ' + err);
     }
-    
-})
+
+
+
+});
+
+*/
 module.exports = router
 
