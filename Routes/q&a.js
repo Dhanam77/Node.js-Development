@@ -1,4 +1,4 @@
-const router = require('mongoose').Router();
+const router = require('express').Router();
 const QAController = require('../Controllers/q&acontroller');
 
 //This route is used to post a question
@@ -12,4 +12,4 @@ router.post('/answer/:id', async(req, res) =>{
 
 });
 
-
+module.exports = router;

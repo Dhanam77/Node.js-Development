@@ -31,7 +31,7 @@ const diseaseRoute = require('./Routes/Diseases');
 const refreshRoute = require('./Routes/refresh');
 const doctorRoute = require('./Routes/doctor');
 const searchRoute = require('./Routes/search');
-
+const qaRoute = require('./Routes/q&a');
 //Connecting to DB
 mongoose.connect(process.env.DB_CONNECT,
     { useNewUrlParser: true },
@@ -46,6 +46,7 @@ app.use('/api', diseaseRoute);
 app.use('/api',refreshRoute);
 app.use('/api',doctorRoute);
 app.use('/api',searchRoute);
+app.use('/api',qaRoute);
 
 
 app.use(passport.initialize());
