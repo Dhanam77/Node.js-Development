@@ -7,15 +7,15 @@ const questionSchema = new mongoose.Schema({
         required: true
     },
     
-    answer:{
-        type:String
+    answers:{
+        type:Array
     },
     asked_by:{
         type:String,
         required:true
     },
     answered_by:{
-        type:String
+        type:Array
     },
     asked_on:{
         type:Date,
