@@ -1,5 +1,8 @@
-const Doctor = require('../model/Doctor');
+const Doctor = require('../model/Doctor.js');
 const Question = require('../model/Question.js');
+const Answer = require('../model/Answers.js');
+
+
 //Post a question
 exports.post_question = async(req, res) =>{
 
@@ -7,12 +10,15 @@ exports.post_question = async(req, res) =>{
     const asked_on_string = Date.now();
     const asked_by_string = req.params.id;
 
+    //Create question object
     const question = new Question({
         question:question_string,
         asked_on:asked_on_string,
         asked_by:asked_by_string
     });
+
     try{
+        //Post the question
         await question.save();
         res.status(200).send('Question posted');
 
@@ -29,19 +35,21 @@ exports.post_question = async(req, res) =>{
 exports.get_questions = async(req, res) =>{
     const type = req.body.type;
     if(type){
-        Question.find({question:{$regex:type, $options:'i'}}).sort({asked_on:-1}).exec()
+        //Get questions by type
+        Question.find({question:{$regex:type, $options:'i'}}).sort({asked_on:-1}).limit(3).exec()
         .then(data => res.status(200).send(data))
         .catch(err => res.status(400).send('Error in getting questions ' + err));
     }
     else{
-        Question.find().sort({asked_on:-1}).exec()
+        //Get questions by recency
+        Question.find().sort({asked_on:-1}).limit(3).exec()
         .then(data => res.status(200).send(data))
         .catch(err => res.status(400).send('Error in getting questions ' + err));
    
     }
 };
 
-//Post a answer
+//Post an answer
 exports.post_answer = async(req, res) =>{
         const question = req.body.question;
         const asked_by = req.body.asked_by;
@@ -49,10 +57,27 @@ exports.post_answer = async(req, res) =>{
         const doctor_id = req.params.id;
         
         try{
+            //Find the question which is to be answered
             const question_object = await Question.findOne({question:question, asked_by:asked_by});
             question_id = question_object._id;
-            console.log(question_object.answers.length);
-            question_object['answers'].push(answer);
+
+            //Find no of answers to the question
+            const length = question_object['answers'].length;
+
+            //Only top 3 answers will be in main db
+            //Others will be saved in other db
+            if(length == 3){
+                const answer_obj  = new Answer({
+                    doctor_id:doctor_id,
+                    question_id:question_id,
+                    answer:answer
+                });
+                answer_obj.save();
+            }
+            else{
+                question_object['answers'].push(answer);
+
+            }
             question_object['answered_by'].push(doctor_id)
             question_object.save();
             try{
@@ -60,7 +85,7 @@ exports.post_answer = async(req, res) =>{
                 if(doctor){              
                     doctor['answers'].push(question_id);
                     await doctor.save();
-                    res.status(200).send('Added question_id to doctors list');
+                    res.status(200).send('Added answer to the question');
                 }
                 else{
                     doctor = new Doctor({
@@ -68,7 +93,7 @@ exports.post_answer = async(req, res) =>{
                         answers:[question_id]
                     });
                     doctor.save();
-                    res.status(200).send('New entry for doctor saved');
+                    res.status(200).send('Added answer to the question');
                 }
             }
             catch(err){
