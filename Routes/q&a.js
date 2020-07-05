@@ -6,6 +6,8 @@ const QAController = require('../Controllers/q&acontroller');
 //Here ID corresponds to user_id
 router.post('/question/:id', QAController.post_question);
 
+router.post('/question/edit/:id', QAController.edit_question);
+
 
 //This route is used to post an answer to a question
 //Here ID corresponds to Question_id

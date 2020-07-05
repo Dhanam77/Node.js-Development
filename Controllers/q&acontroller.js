@@ -108,3 +108,19 @@ exports.post_answer = async(req, res) =>{
         }
     
 };
+
+//Route to enable user to edit his question
+exports.edit_question = async(req,res) =>{
+    const question = req.body.question;
+    const asked_by = req.params.id;
+    const newQuestion = req.body.new_question;
+
+    try{
+        Question.findOneAndUpdate({question:question, asked_by:asked_by}, {$set:{question:newQuestion}});
+        res.status(200).send('Question updated successfully');
+    }
+    catch(err){
+        res.status(400).send('Error updating the question');
+    }
+         
+}
