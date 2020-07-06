@@ -137,8 +137,6 @@ exports.edit_answer = async(req, res) => {
   
 
     const answer_obj = Answer.find({})   
-
-
 }
 //This is used to delete a question
 //Can only be deleted by doctor
@@ -151,7 +149,7 @@ exports.delete_question = async(req, res) => {
         res.status(200).send('Question deleted successfully');
     }
     catch(err) {
-        res.status(400).send('Error while deleting the question ' + err);
+        res.status(400).send('Error  while deleting the question ' + err);
     }
 
 }
