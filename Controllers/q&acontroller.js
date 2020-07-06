@@ -75,7 +75,13 @@ exports.post_answer = async(req, res) =>{
                 answer_obj.save();
             }
             else{
-                question_object['answers'].push(answer);
+                const answer_obj  = new Answer({
+                    doctor_id:doctor_id,
+                    question_id:question_id,
+                    answer:answer
+                });
+                answer_obj.save();
+                question_object['answers'].push(answer_obj);
 
             }
             question_object['answered_by'].push(doctor_id)
@@ -100,11 +106,9 @@ exports.post_answer = async(req, res) =>{
                 res.status(400).send('Error posting answer ' + err);
     
             }
-    
-    
         }
         catch(err){
-            res.status(400).send('Error posting answer ' + err);
+            res.status(400).send('No question found asked by this user ' + err);
         }
     
 };
@@ -123,4 +127,31 @@ exports.edit_question = async(req,res) =>{
         res.status(400).send('Error updating the question');
     }
          
+}
+
+exports.edit_answer = async(req, res) => {
+    const question = req.body.question;
+    const asked_by = req.body.asked_by;
+    const doctor_id = req.params.id;
+
+  
+
+    const answer_obj = Answer.find({})   
+
+
+}
+//This is used to delete a question
+//Can only be deleted by doctor
+exports.delete_question = async(req, res) => {
+    const question = req.body.question;
+    const asked_by = req.body.asked_by;
+
+    try{
+        Question.findOneAndDelete({question:question, asked_by:asked_by});
+        res.status(200).send('Question deleted successfully');
+    }
+    catch(err) {
+        res.status(400).send('Error while deleting the question ' + err);
+    }
+
 }
