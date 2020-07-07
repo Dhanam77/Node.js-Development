@@ -17,7 +17,7 @@ router.post('/question/delete', QAController.delete_question);
 router.post('/answer', QAController.post_answer);
 
 //This route is used to post an answer to a question
-router.post('/answer', QAController.edit_answer);
+router.post('/answer/edit', QAController.edit_answer);
 
 //This route is used to get recently asked questions or questions by type when Q&A is accessed
 router.get('/questions', QAController.get_questions);

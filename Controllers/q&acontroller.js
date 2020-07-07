@@ -59,7 +59,12 @@ exports.post_answer = async(req, res) =>{
         try{
             //Find the question which is to be answered
             const question_object = await Question.findOne({question:question, asked_by:asked_by});
-            question_id = question_object._id;
+            if(question_object){
+                question_id = question_object._id;
+            }
+            else{
+                res.status(400).send('Cannot find question with given question and asked_by');
+            }
 
             //Find no of answers to the question
             const length = question_object['answers'].length;
@@ -80,7 +85,6 @@ exports.post_answer = async(req, res) =>{
                     question_id:question_id,
                     answer:answer
                 });
-                answer_obj.save();
                 question_object['answers'].push(answer_obj);
                 question_object['answered_by'].push(doctor_id)
 
@@ -134,10 +138,40 @@ exports.edit_answer = async(req, res) => {
     const question = req.body.question;
     const asked_by = req.body.asked_by;
     const doctor_id = req.body.answered_by;
+    const new_answer = req.body.new_answer;
 
-  
+    try{
+        const question_obj = await Question.find({question:question, asked_by:asked_by});
+        const question_id = question_obj._id;
 
-    const answer_obj = Answer.find({})   
+        try{
+            let answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
+            if(answer){
+                await Answer.findOne({doctor_id:doctor_id, question_id:question_id}, {$set:{answer:new_answer}});
+                res.status(200).send('Answer Updated Successfully');
+                
+            }
+            else{
+                answer = await Question.findOne({question:question, asked_by:asked_by});
+                const answers_array = answer['answers'];
+                
+                for (var i = 0; i < answers_array.length; i++) {
+                if (answers_array[i].doctor_id === doctor_id) {
+                    answers_array[i].answer = new_answer;
+                    break;
+                }
+}
+            }
+
+        }
+        catch(err){
+            res.status(400).send('Error in finding answer ' + err);
+        }
+    }
+    catch(err){
+        res.status(400).send('Error in finding the question ' + err);
+    }
+
 }
 
 
