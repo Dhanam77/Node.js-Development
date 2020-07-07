@@ -8,7 +8,7 @@ exports.post_question = async(req, res) =>{
 
     const question_string = req.body.question;
     const asked_on_string = Date.now();
-    const asked_by_string = req.params.id;
+    const asked_by_string = req.body.asked_by;
 
     //Create question object
     const question = new Question({
@@ -54,7 +54,7 @@ exports.post_answer = async(req, res) =>{
         const question = req.body.question;
         const asked_by = req.body.asked_by;
         const answer = req.body.answer;
-        const doctor_id = req.params.id;
+        const doctor_id = req.body.answered_by;
         
         try{
             //Find the question which is to be answered
@@ -82,10 +82,11 @@ exports.post_answer = async(req, res) =>{
                 });
                 answer_obj.save();
                 question_object['answers'].push(answer_obj);
+                question_object['answered_by'].push(doctor_id)
+
 
             }
-            question_object['answered_by'].push(doctor_id)
-            question_object.save();
+            await question_object.save();
             try{
                 let doctor = await Doctor.findOne({doctor_id:doctor_id});    
                 if(doctor){              
@@ -116,11 +117,11 @@ exports.post_answer = async(req, res) =>{
 //Route to enable user to edit his question
 exports.edit_question = async(req,res) =>{
     const question = req.body.question;
-    const asked_by = req.params.id;
     const newQuestion = req.body.new_question;
+    const asked_by = req.body.asked_by;
 
     try{
-        Question.findOneAndUpdate({question:question, asked_by:asked_by}, {$set:{question:newQuestion}});
+        await Question.findOneAndUpdate({question:question, asked_by:asked_by}, {$set:{question:newQuestion}});
         res.status(200).send('Question updated successfully');
     }
     catch(err){
@@ -132,12 +133,14 @@ exports.edit_question = async(req,res) =>{
 exports.edit_answer = async(req, res) => {
     const question = req.body.question;
     const asked_by = req.body.asked_by;
-    const doctor_id = req.params.id;
+    const doctor_id = req.body.answered_by;
 
   
 
     const answer_obj = Answer.find({})   
 }
+
+
 //This is used to delete a question
 //Can only be deleted by doctor
 exports.delete_question = async(req, res) => {
@@ -145,7 +148,7 @@ exports.delete_question = async(req, res) => {
     const asked_by = req.body.asked_by;
 
     try{
-        Question.findOneAndDelete({question:question, asked_by:asked_by});
+        await Question.findOneAndDelete({question:question, asked_by:asked_by});
         res.status(200).send('Question deleted successfully');
     }
     catch(err) {
