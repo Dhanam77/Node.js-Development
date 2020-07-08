@@ -129,7 +129,7 @@ exports.edit_question = async(req,res) =>{
         res.status(200).send('Question updated successfully');
     }
     catch(err){
-        res.status(400).send('Error updating the question');
+        res.status(400).send('Error updating the question ' + err);
     }
          
 }
@@ -141,26 +141,47 @@ exports.edit_answer = async(req, res) => {
     const new_answer = req.body.new_answer;
 
     try{
-        const question_obj = await Question.find({question:question, asked_by:asked_by});
+        const question_obj = await Question.findOne({question:question, asked_by:asked_by});
         const question_id = question_obj._id;
 
         try{
-            let answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
+            //First find answer in answers_database
+            //If not there, we'll find in questions_database
+            var answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
+            console.log(doctor_id);
+            console.log(question_id);
+
+            //Answer found in answers_database
             if(answer){
-                await Answer.findOne({doctor_id:doctor_id, question_id:question_id}, {$set:{answer:new_answer}});
+                await Answer.findOneAndUpdate({doctor_id:doctor_id, question_id:question_id}, {$set:{answer:new_answer}});
                 res.status(200).send('Answer Updated Successfully');
                 
             }
+            //Not found, so find in questions_db
             else{
-                answer = await Question.findOne({question:question, asked_by:asked_by});
-                const answers_array = answer['answers'];
-                
-                for (var i = 0; i < answers_array.length; i++) {
-                if (answers_array[i].doctor_id === doctor_id) {
-                    answers_array[i].answer = new_answer;
-                    break;
+                try{
+                    let answer_obj = await Question.findById({_id:question_id});
+                    let answers_array = answer_obj['answers'];
+                    let updated = false;
+                    for (var i = 0; i < answers_array.length; i++) {
+                        if (answers_array[i].doctor_id === doctor_id) {
+                            answers_array[i].answer = new_answer;
+                            updated=true;
+                            break;
+                        }
+                    }
+                    if(updated){
+                        res.status(200).send('Answer Updated Successfullyy');
+
+                    }else{
+                        res.status(400).send('Error');
+
+                    }
                 }
-}
+                catch(err){
+                    res.status(400).send('Error in finding answer ' + err);
+                }
+                
             }
 
         }
