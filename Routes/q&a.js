@@ -20,7 +20,7 @@ router.post('/answer', QAController.post_answer);
 router.patch('/answer', QAController.edit_answer);
 
 //This route is used to delete an answer to a question
-router.delete('/answer', QAController.delete_question);
+router.delete('/answer', QAController.delete_answer);
 
 //This route is used to get recently asked questions or questions by type when Q&A is accessed
 router.get('/questions', QAController.get_questions);

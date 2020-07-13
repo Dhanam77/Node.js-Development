@@ -218,12 +218,13 @@ exports.delete_question = async(req, res) => {
 
 }
 
-exports.delete_question = async(req, res) => {
+exports.delete_answer = async(req, res) => {
     const question = req.body.question;
     const asked_by = req.body.asked_by;
     const doctor_id = req.body.answered_by;
 
     try{
+        //Find question id of the answer to be deleted
         const question_obj = await Question.findOne({question:question, asked_by:asked_by});
         const question_id = question_obj._id;
 
@@ -248,6 +249,7 @@ exports.delete_question = async(req, res) => {
                     console.log(answers_array);
                     let updated = false;
                     console.log(answers_array.length);
+                    /*
                     var i = 0;
                     for (; i < answers_array.length; i++) {
                         if (answers_array[i]['doctor_id'] === doctor_id) {
@@ -256,9 +258,18 @@ exports.delete_question = async(req, res) => {
                             break;
                         }
                     }
-                    delete answers_array[i];
 
-                    if(updated){
+                    */
+
+                    delete answers_array[1];
+
+                    
+
+                    console.log(answers_array);
+                    var newArr = answers_array.filter(() => doctor_id === doctor_id)
+                    
+                    if(newArr){
+                        console.log(newArr)
                         res.status(200).send('Answer Deleted Successfullyy');
 
                     }else{
