@@ -51,8 +51,11 @@ exports.get_questions = async(req, res) =>{
 
 //Post an answer
 exports.post_answer = async(req, res) =>{
+
+        //Question and asked_by is used to find question_id
         const question = req.body.question;
         const asked_by = req.body.asked_by;
+
         const answer = req.body.answer;
         const doctor_id = req.body.answered_by;
         
@@ -78,6 +81,7 @@ exports.post_answer = async(req, res) =>{
                     answer:answer
                 });
                 answer_obj.save();
+
             }
             else{
                 const answer_obj  = new Answer({
@@ -140,58 +144,58 @@ exports.edit_answer = async(req, res) => {
     const doctor_id = req.body.answered_by;
     const new_answer = req.body.new_answer;
 
+   
     try{
+        //Find question id of the answer to be deleted
         const question_obj = await Question.findOne({question:question, asked_by:asked_by});
         const question_id = question_obj._id;
 
+         //First find answer in questions_db
+        //If not there, we'll find in answers_db
+            
         try{
-            //First find answer in answers_database
-            //If not there, we'll find in questions_database
-            var answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
-            console.log(doctor_id);
-            console.log(question_id);
-
-            //Answer found in answers_database
-            if(answer){
-                await Answer.findOneAndUpdate({doctor_id:doctor_id, question_id:question_id}, {$set:{answer:new_answer}});
-                res.status(200).send('Answer Updated Successfully');
-                
-            }
-            //Not found, so find in questions_db
-            else{
-                try{
-                    let answer_obj = await Question.findById({_id:question_id});
-                    var answers_array = answer_obj['answers'];
-                    console.log(answers_array);
-                    let updated = false;
-                    console.log(answers_array.length);
-                    for (var i = 0; i < answers_array.length; i++) {
-                        if (answers_array[i]['doctor_id'] === doctor_id) {
-                            console.log('answer: ' + answers_array[i].answer);
-                            answers_array[i]['answer'] = new_answer;
-                            updated=true;
-                            break;
-                        }
-                    }
-                    if(updated){
-                        await answer_obj.save();
-
-                        res.status(200).send('Answer Updated Successfullyy');
-
-                    }else{
-                        res.status(400).send('Error');
-
-                    }
+            //Find the question holding the answer
+            let question_obj = await Question.findById({_id:question_id});
+            var answers_array = question_obj['answers'];                                
+            let i = 0, hasAnswer = false;
+            for (; i < answers_array.length; i++) {
+                if (answers_array[i]['doctor_id'] === doctor_id) {
+                    hasAnswer = true;
+                    break;                    
                 }
-                catch(err){
-                    res.status(400).send('Error in finding answer ' + err);
+            }
+            if(hasAnswer){
+                answers_array[i]['answer'] = new_answer;
+                const updated = await Question.findByIdAndUpdate({_id:question_id}, {$set:{answers:answers_array}});     
+    
+                if(updated){
+                    res.status(200).send('Answer Updated Successfullyy');
+                } 
+                else{
+                    res.status(400).send('Error');
+                }
+            } else{
+                let answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
+                console.log(doctor_id);
+                console.log(question_id);
+    
+                //Answer found in answers_database
+                if(answer){
+                    await Answer.findOneAndUpdate({doctor_id:doctor_id, question_id:question_id}, {$set:{answer:new_answer}});
+                    res.status(200).send('Answer Updated Successfully');
+                    
+                } 
+                else{
+                    res.status(400).send('Error in finding answer');
+
                 }
                 
             }
 
         }
         catch(err){
-            res.status(400).send('Error in finding answer ' + err);
+            res.status(400).send('Error in finding given question');
+
         }
     }
     catch(err){
@@ -228,64 +232,53 @@ exports.delete_answer = async(req, res) => {
         const question_obj = await Question.findOne({question:question, asked_by:asked_by});
         const question_id = question_obj._id;
 
+         //First find answer in questions_db
+        //If not there, we'll find in answers_db
+            
         try{
-            //First find answer in answers_database
-            //If not there, we'll find in questions_database
-            var answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
-            console.log(doctor_id);
-            console.log(question_id);
-
-            //Answer found in answers_database
-            if(answer){
-                await Answer.findOneAndDelete({doctor_id:doctor_id, question_id:question_id});
-                res.status(200).send('Answer Deleted Successfully');
-                
-            }
-            //Not found, so find in questions_db
-            else{
-                try{
-                    let answer_obj = await Question.findById({_id:question_id});
-                    var answers_array = answer_obj['answers'];
-                    console.log(answers_array);
-                    let updated = false;
-                    console.log(answers_array.length);
-                    /*
-                    var i = 0;
-                    for (; i < answers_array.length; i++) {
-                        if (answers_array[i]['doctor_id'] === doctor_id) {
-//                            delete answers_array[i];
-                            updated=true;
-                            break;
-                        }
-                    }
-
-                    */
-
-                    delete answers_array[1];
-
-                    
-
-                    console.log(answers_array);
-                    var newArr = answers_array.filter(() => doctor_id === doctor_id)
-                    
-                    if(newArr){
-                        console.log(newArr)
-                        res.status(200).send('Answer Deleted Successfullyy');
-
-                    }else{
-                        res.status(400).send('Error');
-
-                    }
+            //Find the question holding the answer
+            let question_obj = await Question.findById({_id:question_id});
+            var answers_array = question_obj['answers'];                                
+            let i = 0, hasAnswer = false;
+            for (; i < answers_array.length; i++) {
+                if (answers_array[i]['doctor_id'] === doctor_id) {
+                    hasAnswer = true;
+                    break;                    
                 }
-                catch(err){
-                    res.status(400).send('Error in finding answer ' + err);
+            }
+            if(hasAnswer){
+                answers_array.splice(i, 1);
+
+                const updated = await Question.findByIdAndUpdate({_id:question_id}, {$set:{answers:answers_array}});     
+    
+                if(updated){
+                    res.status(200).send('Answer Deleted Successfullyy');
+                } 
+                else{
+                    res.status(400).send('Error');
+                }
+            } else{
+                let answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
+                console.log(doctor_id);
+                console.log(question_id);
+    
+                //Answer found in answers_database
+                if(answer){
+                    await Answer.findOneAndDelete({doctor_id:doctor_id, question_id:question_id});
+                    res.status(200).send('Answer Deleted Successfully');
+                    
+                } 
+                else{
+                    res.status(400).send('Error in finding answer');
+
                 }
                 
             }
 
         }
         catch(err){
-            res.status(400).send('Error in finding answer ' + err);
+            res.status(400).send('Error in finding given question');
+
         }
     }
     catch(err){
