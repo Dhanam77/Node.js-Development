@@ -78,7 +78,8 @@ exports.post_answer = async(req, res) =>{
                 const answer_obj  = new Answer({
                     doctor_id:doctor_id,
                     question_id:question_id,
-                    answer:answer
+                    answer:answer,
+                    from_load_more:true
                 });
                 answer_obj.save();
 
@@ -87,7 +88,8 @@ exports.post_answer = async(req, res) =>{
                 const answer_obj  = new Answer({
                     doctor_id:doctor_id,
                     question_id:question_id,
-                    answer:answer
+                    answer:answer,
+                    from_load_more:false
                 });
                 question_object['answers'].push(answer_obj);
                 question_object['answered_by'].push(doctor_id)
@@ -157,15 +159,13 @@ exports.edit_answer = async(req, res) => {
             //Find the question holding the answer
             let question_obj = await Question.findById({_id:question_id});
             var answers_array = question_obj['answers'];                                
-            let i = 0, hasAnswer = false;
-            for (; i < answers_array.length; i++) {
-                if (answers_array[i]['doctor_id'] === doctor_id) {
-                    hasAnswer = true;
-                    break;                    
-                }
-            }
-            if(hasAnswer){
-                answers_array[i]['answer'] = new_answer;
+            let i = -1
+            i = answers_array.findIndex(function(item, i){
+                return item.doctor_id === doctor_id
+              });
+
+            if(i != -1){
+              answers_array[i]['answer'] = new_answer;
                 const updated = await Question.findByIdAndUpdate({_id:question_id}, {$set:{answers:answers_array}});     
     
                 if(updated){
@@ -239,16 +239,13 @@ exports.delete_answer = async(req, res) => {
             //Find the question holding the answer
             let question_obj = await Question.findById({_id:question_id});
             var answers_array = question_obj['answers'];                                
-            let i = 0, hasAnswer = false;
-            for (; i < answers_array.length; i++) {
-                if (answers_array[i]['doctor_id'] === doctor_id) {
-                    hasAnswer = true;
-                    break;                    
-                }
-            }
-            if(hasAnswer){
-                answers_array.splice(i, 1);
+            let i = -1
+            i = answers_array.findIndex(function(item, i){
+                return item.doctor_id === doctor_id
+              });
 
+            if(i != -1){
+                answers_array.splice(i, 1);
                 const updated = await Question.findByIdAndUpdate({_id:question_id}, {$set:{answers:answers_array}});     
     
                 if(updated){

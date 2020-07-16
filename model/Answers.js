@@ -12,6 +12,10 @@ const answerSchema = new mongoose.Schema({
     answer:{
         type:String,
         required:true
+    },
+    from_load_more:{
+        type:Boolean,
+        required:true
     }
 });
 
