@@ -113,6 +113,10 @@ async function verify(token) {
             });
     }
     });
-    }
+
+}
+
+app.get('/', () => 'Hello world');
+
 
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));
