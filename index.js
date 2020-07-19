@@ -12,8 +12,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
 
 
 
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 //Not needed now
 //const MongoClient = require('mongodb').MongoClient;   
@@ -115,8 +114,5 @@ async function verify(token) {
     });
 
 }
-
-app.get('/', () => 'Hello world');
-
 
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));
