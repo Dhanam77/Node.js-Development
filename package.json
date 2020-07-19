@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,9 +23,6 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "twilio": "^3.45.0",
-    "nodemon": "^2.0.4"
-  },
-  "devDependencies": {
     "nodemon": "^2.0.4"
   },
   "engines": {
