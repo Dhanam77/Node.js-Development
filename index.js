@@ -114,5 +114,6 @@ async function verify(token) {
     });
 
 }
+app.get('/', ()=> 'hello');
 
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));
