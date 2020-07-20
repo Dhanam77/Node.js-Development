@@ -5,11 +5,11 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 require('./config/passport');
 
-const {OAuth2Client} = require('google-auth-library');
+/*const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_SECRET,
     "http://localhost/3000/google/signup/callback");
-
+*/
 
 
 const PORT = process.env.PORT || 8080;
@@ -46,7 +46,7 @@ app.use('/api',refreshRoute);
 app.use('/api',doctorRoute);
 app.use('/api',searchRoute);
 app.use('/api',qaRoute);
-
+/*
 
 app.use(passport.initialize());
 
@@ -59,7 +59,7 @@ app.get('/passed', (req, res) => {
     res.send('Welcome bruh');
 })
 
-
+*/
 /*
  * GOOGLE AUTHENTICATION
  */
@@ -82,7 +82,7 @@ app.get('/', (req, res) => {
 });
 */
 
-
+/*
 app.get('/google/signup', (req, res) => {
     const {idToken} = req.body;
     verify(idToken).catch(console.error);
@@ -114,6 +114,7 @@ async function verify(token) {
     });
 
 }
+*/
 app.get('/', ()=> 'hello');
 
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));
