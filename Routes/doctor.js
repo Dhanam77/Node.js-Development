@@ -5,7 +5,7 @@ const doctor = 'doctor';
 //Route to test whether a user is doctor or not
 router.get('/doctor/:id', async function (req, res) {
     const id = req.params.id;
-
+/*
     try{
         const user = await User.findOne({_id:id, type:doctor});
         if(user){
@@ -18,6 +18,8 @@ router.get('/doctor/:id', async function (req, res) {
     catch(err){
         res.status(400).send('Error getting type of user' + err);
     }
+    */
+   res.send('hellosup');
 })
 
 
