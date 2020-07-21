@@ -1,4 +1,3 @@
-/*
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -13,16 +12,11 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
 */
 
 
-const PORT = process.env.PORT || 5000
-
-express()
-  .get('/', (req, res) => res.send('hello'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+const PORT = process.env.PORT || 8080;
 
 //Not needed now
 //const MongoClient = require('mongodb').MongoClient;   
 
-/*
 app.use(express.json());
 
 
@@ -120,7 +114,9 @@ async function verify(token) {
     });
 
 }
-
-
-app.listen(process.env.PORT || 3000, () => console.log(`Server is running on Port ${process.env.PORT || 3000}`));
 */
+app.get('/', function (req, res) {
+    res.send('Hello');
+
+});
+app.listen(process.env.PORT || 3000, () => console.log(`Server is running on Port ${process.env.PORT || 3000}`));
