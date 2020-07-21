@@ -12,12 +12,12 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
 */
 
 
-const PORT = process.env.PORT || 8080;
+//const PORT = process.env.PORT || 8080;
 
 //Not needed now
 //const MongoClient = require('mongodb').MongoClient;   
 
-app.use(express.json());
+//app.use(express.json());
 
 
 dotenv.config();
@@ -115,8 +115,12 @@ async function verify(token) {
 
 }
 */
-app.get('/', function (req, res) {
-    res.send('Hello');
+const PORT = process.env.PORT || 5000
 
+
+app.get('/', function (req, res) {
+    console.log('hellow');
+    res.send('hello');
 });
-app.listen(process.env.PORT || 3000, () => console.log(`Server is running on Port ${process.env.PORT || 3000}`));
+
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
