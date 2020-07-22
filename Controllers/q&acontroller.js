@@ -222,7 +222,7 @@ exports.delete_question = async function (req, res) {
 
 }
 
-exports.delete_answer = async(req, res) => {
+exports.delete_answer = async function (req, res) {
     const question = req.body.question;
     const asked_by = req.body.asked_by;
     const doctor_id = req.body.answered_by;
