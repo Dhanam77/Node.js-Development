@@ -31,7 +31,7 @@ const searchRoute = require('./Routes/search');
 const qaRoute = require('./Routes/q&a');
 
 //Connecting to DB
-mongoose.connect(process.env.DB_CONNECT,
+mongoose.connect('mongodb+srv://dbUser:kpnajdd@05@data-yetle.mongodb.net/test',
     { useNewUrlParser: true },
     function (){
         console.log('connected to database');
@@ -117,8 +117,7 @@ const PORT = process.env.PORT || 3000
 
 
 app.get('/', function (req, res) {
-    console.log('hellow');
-    res.send('hello');
+    res.send(`If you're reading this, consider yourself lucky`);
 });
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
