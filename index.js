@@ -36,7 +36,9 @@ const qaRoute = require('./Routes/q&a');
 //Connecting to DB
 mongoose.connect(process.env.DB_CONNECT,
     { useNewUrlParser: true },
-    () => console.log('connected to database')
+    function (){
+        console.log('connected to database');
+    } 
 );
 /*
 
