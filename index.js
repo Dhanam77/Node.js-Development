@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const passport = require('passport');
 
-//require('./config/passport');
+require('./config/passport');
 
 /*const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
@@ -16,8 +16,6 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
 //const MongoClient = require('mongodb').MongoClient;   
 
 app.use(express.json());
-
-
 dotenv.config();
 /*    
 
@@ -34,7 +32,7 @@ const searchRoute = require('./Routes/search');
 const qaRoute = require('./Routes/q&a');
 
 //Connecting to DB
-mongoose.connect(process.env.DB_CONNECT,
+mongoose.connect('mongodb+srv://dbUser:kpnajdd@05@data-yetle.mongodb.net/test',
     { useNewUrlParser: true },
     function (){
         console.log('connected to database');
