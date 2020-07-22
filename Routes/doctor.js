@@ -3,7 +3,7 @@ const User = require('../model/User');
 const doctor = 'doctor';
 
 //Route to test whether a user is doctor or not
-router.get('/doctor/:id', async function (req, res) {
+router.get('/doctor/:id', async(req, res) =>{
     const id = req.params.id;
 
     try{
@@ -20,15 +20,14 @@ router.get('/doctor/:id', async function (req, res) {
     }
     
  //  res.send('hellosup');
-})
+});
 
 
 //Route to make the user a doctor
 router.post('/doctor/:id', async function (req, res)  {
     const id = req.params.id;
 
-    
-        await User.findOneAndUpdate({_id:id}, {$set:{type:doctor}}, {upsert:true}).exec()
+    await User.findOneAndUpdate({_id:id}, {$set:{type:doctor}}, {upsert:true}).exec()
         .then(data => {
             res.status(200).send('Upgraded user to doctor');
         }).catch(err => {

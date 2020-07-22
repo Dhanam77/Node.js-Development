@@ -12,17 +12,14 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
     "http://localhost/3000/google/signup/callback");
 */
 
-
-//const PORT = process.env.PORT || 8080;
-
 //Not needed now
 //const MongoClient = require('mongodb').MongoClient;   
 
-//app.use(express.json());
+app.use(express.json());
 
-/*
+
 dotenv.config();
-    
+/*    
 
 //To Routes Folder
 const authRoute = require('./Routes/auth');
@@ -33,13 +30,15 @@ const refreshRoute = require('./Routes/refresh');
 const doctorRoute = require('./Routes/doctor');
 /*
 const searchRoute = require('./Routes/search');
+*/
 const qaRoute = require('./Routes/q&a');
+
 //Connecting to DB
 mongoose.connect(process.env.DB_CONNECT,
     { useNewUrlParser: true },
     () => console.log('connected to database')
 );
-
+/*
 
 //Will Require /api/auth before @EG signup 
 app.use('/api/auth/', authRoute);
@@ -50,9 +49,10 @@ app.use('/api',refreshRoute);
 app.use('/api',doctorRoute);
 /*
 app.use('/api',searchRoute);
+*/
 app.use('/api',qaRoute);
-/*
 
+/*
 app.use(passport.initialize());
 
 app.get('/failed', (req, res) => {
@@ -79,12 +79,6 @@ app.get('/google/signup/callback',
         res.redirect('/passed');
     });
 
-
-
-//Check get call
-app.get('/', (req, res) => {
-    res.send('You get what you want')
-});
 */
 
 /*
@@ -120,7 +114,7 @@ async function verify(token) {
 
 }
 */
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 3000
 
 
 app.get('/', function (req, res) {

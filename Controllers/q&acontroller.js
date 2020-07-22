@@ -4,7 +4,7 @@ const Answer = require('../model/Answers.js');
 
 
 //Post a question
-exports.post_question = async(req, res) =>{
+exports.post_question = async function (req, res) {
 
     const question_string = req.body.question;
     const asked_on_string = Date.now();
@@ -32,7 +32,7 @@ exports.post_question = async(req, res) =>{
 };
 
 //Get questions by type and/or by recency
-exports.get_questions = async(req, res) =>{
+exports.get_questions = async function (req, res) {
     const type = req.body.type;
     if(type){
         //Get questions by type
@@ -50,7 +50,7 @@ exports.get_questions = async(req, res) =>{
 };
 
 //Post an answer
-exports.post_answer = async(req, res) =>{
+exports.post_answer = async function (req, res) {
 
         //Question and asked_by is used to find question_id
         const question = req.body.question;
@@ -125,7 +125,7 @@ exports.post_answer = async(req, res) =>{
 };
 
 //Route to enable user to edit his question
-exports.edit_question = async(req,res) =>{
+exports.edit_question = async function (req, res) {
     const question = req.body.question;
     const newQuestion = req.body.new_question;
     const asked_by = req.body.asked_by;
@@ -140,7 +140,7 @@ exports.edit_question = async(req,res) =>{
          
 }
 
-exports.edit_answer = async(req, res) => {
+exports.edit_answer = async function (req, res) {
     const question = req.body.question;
     const asked_by = req.body.asked_by;
     const doctor_id = req.body.answered_by;
@@ -207,7 +207,7 @@ exports.edit_answer = async(req, res) => {
 
 //This is used to delete a question
 //Can only be deleted by doctor
-exports.delete_question = async(req, res) => {
+exports.delete_question = async function (req, res) {
     const question = req.body.question;
     const asked_by = req.body.asked_by;
 
