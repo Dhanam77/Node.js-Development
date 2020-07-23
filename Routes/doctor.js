@@ -3,7 +3,7 @@ const User = require('../model/User');
 const doctor = 'doctor';
 
 //Route to test whether a user is doctor or not
-router.get('/doctor/:id', async(req, res) =>{
+router.get('/doctor/:id', async function (req, res){
     const id = req.params.id;
 
     try{

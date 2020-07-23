@@ -4,7 +4,7 @@ const verify = require('../VerifyToken');
 
 //Sample route to get a list of all diseases
 
-router.get('/diseases', verify, async (req, res) => {
+router.get('/diseases', verify,  async function (req, res){
     const diseases = await Aidisease.find().exec();
     res.json(diseases);
 });

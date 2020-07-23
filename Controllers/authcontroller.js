@@ -13,7 +13,7 @@ const refreshTokenExpiresIn = 24*60*60*30   //One month
 
 
 //Signing up the user
-exports.signup_user = async (req, res) => {
+exports.signup_user = async function (req, res) {
 
     //Validating using Joi
     const { error } = registerValidation(req.body);
@@ -62,7 +62,7 @@ exports.signup_user = async (req, res) => {
     }
    
 };
-exports.login_user = async (req, res) => {
+exports.login_user =  async function (req, res){
     //Validating using Joi
     const { error } = loginValidation(req.body);
 
@@ -100,7 +100,7 @@ exports.login_user = async (req, res) => {
 
 //OTP Authentication
 
-exports.login_otp = (req, res) => {
+exports.login_otp =  async function (req, res) {
 
     client.verify
         .services(process.env.SERVICE_ID)
@@ -114,7 +114,7 @@ exports.login_otp = (req, res) => {
         })
 };
 
-exports.verify_otp = async(req, res) => {
+exports.verify_otp =  async function (req, res) {
     client.verify
         .services(process.env.SERVICE_ID)
         .verificationChecks
@@ -156,7 +156,7 @@ exports.verify_otp = async(req, res) => {
 }; 
 
 
-exports.logout_user = async(req,res) => {
+exports.logout_user =  async function (req, res) {
   
     const id = req.params.id;
 

@@ -3,7 +3,7 @@ const User = require('../model/User');
 const MedicalCondition = require('../model/MedicalConditions');
 
 //Get pre diagnosis questions
-exports.get_userinfo =  async(req, res) => {
+exports.get_userinfo =   async function (req, res) {
 
     const user = await User.findById(req.params.id);
     const gender = user.gender;
@@ -18,7 +18,7 @@ exports.get_userinfo =  async(req, res) => {
 
 //Edit a specific profile function
 //Can edit only name and age
-exports.edit_profile = async(req, res) => {
+exports.edit_profile =  async function (req, res) {
 
     const name = req.body.name;
     const age = req.body.age;
@@ -44,7 +44,7 @@ exports.edit_profile = async(req, res) => {
 //Save user data like name, age, gender 
 //This endpoint must only be used to add data and not update it
 //TO update, use edit profile api 
-exports.save_user_data = async(req, res) => {
+exports.save_user_data =  async function (req, res) {
     const name = req.body.name;
     const age = req.body.age;
     const gender = req.body.gender;
@@ -66,7 +66,7 @@ exports.save_user_data = async(req, res) => {
 
 
 //Get a specific profile
-exports.get_profile = async (req, res) => {
+exports.get_profile =  async function (req, res) {
 
     const user = await User.findOne({_id:req.params.id});
     res.status(200).json(user);
@@ -74,13 +74,13 @@ exports.get_profile = async (req, res) => {
 };
 
 //Get all users
-exports.get_user = async(req, res) => {
+exports.get_user =  async function (req, res) {
     const users = await User.find().exec();
     res.status(200).json(users);
 };
 
 //Set user's medical condition
-exports.set_medical_condition = async(req, res) => {
+exports.set_medical_condition =  async function (req, res) {
     const condition = new MedicalCondition({
         user_id : req.params.id,
         is_user : req.body.is_user,
@@ -105,7 +105,7 @@ exports.set_medical_condition = async(req, res) => {
 }
 
 //Get user's medical conditions
-exports.get_medical_conditions = async(req, res) =>{
+exports.get_medical_conditions = async function (req, res){
     await MedicalCondition.find({user_id:req.params.id, is_user:true}).exec()
     .then(user => {
         res.status(200).send(user)
@@ -114,7 +114,7 @@ exports.get_medical_conditions = async(req, res) =>{
 }
 
 // Get user's circle
-exports.get_user_circle = async(req, res) =>{
+exports.get_user_circle =  async function (req, res){
 
     const name = req.body.name;
     const type = req.body.type;

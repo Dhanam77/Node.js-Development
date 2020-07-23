@@ -2,7 +2,7 @@ const RefreshToken = require('../model/RefreshToken');
 const jwt =  require('jsonwebtoken');
 const accessTokenExpiresIn = 300;
 
-exports.get_access_token = async (req, res) => {
+exports.get_access_token = async function (req, res){
     user = req.body.user_id
     refreshToken = req.body.refreshToken;
     try{

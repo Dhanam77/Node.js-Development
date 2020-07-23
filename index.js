@@ -17,18 +17,16 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID,
 
 app.use(express.json());
 dotenv.config();
-/*    
+    
 
 //To Routes Folder
 const authRoute = require('./Routes/auth');
 const userRoute = require('./Routes/users');
 const diseaseRoute = require('./Routes/Diseases');
 const refreshRoute = require('./Routes/refresh');
-*/
+
 const doctorRoute = require('./Routes/doctor');
-/*
 const searchRoute = require('./Routes/search');
-*/
 const qaRoute = require('./Routes/q&a');
 
 //Connecting to DB
@@ -38,18 +36,14 @@ mongoose.connect(process.env.DB_CONNECT,
         console.log('connected to database');
     } 
 );
-/*
 
-//Will Require /api/auth before @EG signup 
 app.use('/api/auth/', authRoute);
 app.use('/api', userRoute);
 app.use('/api', diseaseRoute);
 app.use('/api',refreshRoute);
-*/
+
 app.use('/api',doctorRoute);
-/*
 app.use('/api',searchRoute);
-*/
 app.use('/api',qaRoute);
 
 /*
