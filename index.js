@@ -22,7 +22,7 @@ dotenv.config();
 //To Routes Folder
 const authRoute = require('./Routes/auth');
 const userRoute = require('./Routes/users');
-const diseaseRoute = require('./Routes/Diseases');
+//const diseaseRoute = require('./Routes/Diseases');
 const refreshRoute = require('./Routes/refresh');
 
 const doctorRoute = require('./Routes/doctor');
@@ -39,7 +39,7 @@ mongoose.connect(process.env.DB_CONNECT,
 
 app.use('/api/auth/', authRoute);
 app.use('/api', userRoute);
-app.use('/api', diseaseRoute);
+//app.use('/api', diseaseRoute);
 app.use('/api',refreshRoute);
 
 app.use('/api',doctorRoute);
