@@ -41,7 +41,6 @@ app.use('/api/auth/', authRoute);
 app.use('/api', userRoute);
 //app.use('/api', diseaseRoute);
 app.use('/api',refreshRoute);
-
 app.use('/api',doctorRoute);
 app.use('/api',searchRoute);
 app.use('/api',qaRoute);

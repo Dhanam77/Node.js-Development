@@ -106,8 +106,8 @@ exports.login_otp =  async function (req, res) {
         .services(process.env.SERVICE_ID)
         .verifications
         .create({   //Assuming +91 is already added at the start while sending number
-            to: req.body.phoneNumber,
-            channel: req.body.channel
+            to: req.params.phoneNumber,
+            channel: "sms"
         })
         .then((data) => {
             res.status(200).send("OTP Sent!")

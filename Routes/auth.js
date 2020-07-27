@@ -18,11 +18,11 @@ router.post('/login', AuthController.login_user);
 
 
 //Call when User clicks on Register/Login using OTP
-router.get('/otp/login', AuthController.login_otp);
+router.get('/otp/login/:phoneNumber', AuthController.login_otp);
 
 
 //Call to verify the code sent by user
-router.get('/otp/verify', AuthController.verify_otp);
+router.post('/otp/verify', AuthController.verify_otp);
 
 router.get('/logout/:id', AuthController.logout_user);
 
