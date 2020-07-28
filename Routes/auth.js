@@ -18,7 +18,7 @@ router.post('/login', AuthController.login_user);
 
 
 //Call when User clicks on Register/Login using OTP
-router.get('/otp/login/:phoneNumber', AuthController.login_otp);
+router.post('/otp/login', AuthController.login_otp);
 
 
 //Call to verify the code sent by user
