@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const CommonSymptoms = require('../model/CommonSymptoms');
-
+const VerifyToken = require('../VerifyToken')
 
 //Route to get search results
 //Currently limiting searches to only 5
 //Regex gives partial search 
 //$search gives full text search
-router.get('/search', async function (req, res) {
+router.get('/search', VerifyToken, async function (req, res) {
 
     const text = req.body.text;
     await CommonSymptoms.find({'Complaint':{ $regex: text, $options: "i" }})

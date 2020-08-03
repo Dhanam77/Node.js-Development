@@ -1,9 +1,11 @@
 const router = require('express').Router();
 const User = require('../model/User');
 const doctor = 'doctor';
+const VerifyToken = require('../VerifyToken')
+
 
 //Route to test whether a user is doctor or not
-router.get('/doctor/:id', async function (req, res){
+router.get('/doctor/:id',VerifyToken, async function (req, res){
     const id = req.params.id;
 
     try{
