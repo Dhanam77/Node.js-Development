@@ -24,7 +24,14 @@ router.post('/otp/login', AuthController.login_otp);
 //Call to verify the code sent by user
 router.post('/otp/verify', AuthController.verify_otp);
 
+//Logout a user
 router.get('/logout/:id', AuthController.logout_user);
+
+//Verify a user
+//router.post('/confirmation', AuthController.confirmationToken);
+
+//router.post('/resend', AuthController.resendToken);
+
 
 module.exports = router;
 

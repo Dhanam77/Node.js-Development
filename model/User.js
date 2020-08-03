@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         min:6
 
     },
+    isVerified:{
+        type: Boolean,
+        default:false
+    },
     type:{
         type: String
     },
