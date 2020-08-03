@@ -25,7 +25,7 @@ exports.signup_user = async function (req, res) {
     //Check if user exists
     const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) {
-        return res.status(400).send('This email is already registered!');
+            res.status(400).json({"success": false, "message":"Email already registered"});
     }
 
 
@@ -90,13 +90,13 @@ exports.login_user =  async function (req, res){
     //Does email exit?
     const emailExist = await User.findOne({ email: req.body.email });
     if (!emailExist) {
-        return res.status(400).send('Email doesn\'t exist');
+            res.status(400).json({"success": false, "message":"Email doesn't exist"});
     }
 
     //Is password correct
     const validPassword = await bcrypt.compare(req.body.password, emailExist.password);
     if (!validPassword) {
-        return res.status(400).send('Invalid Password');
+        res.status(400).json({"success": false, "message":"Invalid Password"});
     };
 
     //Create and assign JWT Tokens
@@ -127,7 +127,7 @@ exports.login_otp =  async function (req, res) {
             channel: req.body.channel
         })
         .then((data) => {
-            res.status(200).json("OTP Sent!")
+            res.status(200).json({"success": true, "message":"OTP sent"});
         })
 };
 
@@ -157,7 +157,7 @@ exports.verify_otp =  async function (req, res) {
                     res.send({ user: user._id, token:token, refreshToken:refreshToken});
 
                 }).catch(err => {
-                    res.status(400).send(err);
+                    res.status(400).json({"success": false, "message":"Error " + err});
                     console.log("Error in registering user " + err);
                 });
 
@@ -168,7 +168,7 @@ exports.verify_otp =  async function (req, res) {
             }
             
         }).catch(err => {
-        res.status(400).send('Something is wrong..' + err);
+            res.status(400).json({"success": false, "message":"Something went wrong " + err});
     })
 }; 
 
@@ -179,10 +179,10 @@ exports.logout_user =  async function (req, res) {
 
     try{
         await RefreshToken.findOneAndDelete({user_id:id});
-        res.status(200).send('Successfully logged out');
+        res.status(200).json({"success": true, "message":"Successfully logged out"});
     }
     catch(err){
-        res.status(400).send('Error in logging user out ' + err);
+        res.status(400).json({"success": false, "message":"Something went wrong " + err});
     }
     
 };
@@ -265,7 +265,7 @@ async function saveToken(refreshToken, user_id){
         await token.save();
     }
     catch(err){
-        res.status(400).send('Error in saving token ' + err);
+        res.status(400).json({"success": false, "message":"Error in saving token"});
     }
 
 }

@@ -18,19 +18,19 @@ exports.get_access_token = async function (req, res){
                 next();
             }
             else{
-                res.status(400).send('Need to login again!');
+                res.status(200).json({"success": true, "message":"Need to login again"});
             }
 
 
            
         }
         else{
-            res.status(400).send('Invalid ' + err);
+            res.status(400).json({"success": false, "message":"Invalid " + err});
         }
 
     }
     catch (err) {
-        res.status(400).send('Invalid Refresh Token ' + err);
+        res.status(400).json({"success": false, "message":"Invalid " + err});
     }
     
 };

@@ -13,7 +13,7 @@ router.get('/search', async function (req, res) {
         .limit(5)
        .exec()
        .then(data => res.status(200).send(data))
-       .catch(err => res.status(400).send('Error in getting search results ' + err));
+       .catch( err => res.status(400).json({"success": false, "message":"Error in getting search results " + err}))
 
 });
 

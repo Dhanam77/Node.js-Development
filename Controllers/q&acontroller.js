@@ -20,15 +20,12 @@ exports.post_question = async function (req, res) {
     try{
         //Post the question
         await question.save();
-        res.status(200).send('Question posted');
+        res.status(400).json({"success": true, "message":"Question posted"});
 
     }
     catch(err){
-            res.status(400).send('Error in posting question ' + err);
+        res.status(400).json({"success": false, "message":"Error in posting question " + err});
     }
-    
-
-
 };
 
 //Get questions by type and/or by recency
@@ -38,13 +35,13 @@ exports.get_questions = async function (req, res) {
         //Get questions by type
         Question.find({question:{$regex:type, $options:'i'}}).sort({asked_on:-1}).limit(3).exec()
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(400).send('Error in getting questions ' + err));
+        res.status(400).json({"success": false, "message":"Error in getting question " + err});
     }
     else{
         //Get questions by recency
         Question.find().sort({asked_on:-1}).limit(3).exec()
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(400).send('Error in getting questions ' + err));
+        res.status(400).json({"success": false, "message":"Error in getting question " + err});
    
     }
 };
@@ -66,7 +63,7 @@ exports.post_answer = async function (req, res) {
                 question_id = question_object._id;
             }
             else{
-                res.status(400).send('Cannot find question with given question and asked_by');
+                res.status(400).json({"success": false, "message":"Cannot find question " + err});
             }
 
             //Find no of answers to the question
@@ -102,7 +99,7 @@ exports.post_answer = async function (req, res) {
                 if(doctor){              
                     doctor['answers'].push(question_id);
                     await doctor.save();
-                    res.status(200).send('Added answer to the question');
+                    res.status(200).json({"success": true, "message":"Posted answer"});
                 }
                 else{
                     doctor = new Doctor({
@@ -110,16 +107,16 @@ exports.post_answer = async function (req, res) {
                         answers:[question_id]
                     });
                     doctor.save();
-                    res.status(200).send('Added answer to the question');
+                    res.status(200).json({"success": true, "message":"Posted answer"});
                 }
             }
             catch(err){
-                res.status(400).send('Error posting answer ' + err);
+                res.status(400).json({"success": false, "message":"Error posting answer"});
     
             }
         }
         catch(err){
-            res.status(400).send('No question found asked by this user ' + err);
+            res.status(400).json({"success": false, "message":"Question not found " + err});
         }
     
 };
@@ -132,10 +129,10 @@ exports.edit_question = async function (req, res) {
 
     try{
         await Question.findOneAndUpdate({question:question, asked_by:asked_by}, {$set:{question:newQuestion}});
-        res.status(200).send('Question updated successfully');
+        res.status(200).json({"success": true, "message":"Edited answer"});
     }
     catch(err){
-        res.status(400).send('Error updating the question ' + err);
+        res.status(400).json({"success": false, "message":"Error " + err});
     }
          
 }
@@ -169,10 +166,10 @@ exports.edit_answer = async function (req, res) {
                 const updated = await Question.findByIdAndUpdate({_id:question_id}, {$set:{answers:answers_array}});     
     
                 if(updated){
-                    res.status(200).send('Answer Updated Successfullyy');
+                    res.status(200).json({"success": true, "message":"Updated answer"});
                 } 
                 else{
-                    res.status(400).send('Error');
+                    res.status(400).json({"success": false, "message":"Error " + err});
                 }
             } else{
                 let answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
@@ -182,11 +179,11 @@ exports.edit_answer = async function (req, res) {
                 //Answer found in answers_database
                 if(answer){
                     await Answer.findOneAndUpdate({doctor_id:doctor_id, question_id:question_id}, {$set:{answer:new_answer}});
-                    res.status(200).send('Answer Updated Successfully');
+                    res.status(200).json({"success": true, "message":"Updated answer"});
                     
                 } 
                 else{
-                    res.status(400).send('Error in finding answer');
+                    res.status(400).json({"success": false, "message":"Error in finding answer"});
 
                 }
                 
@@ -194,12 +191,12 @@ exports.edit_answer = async function (req, res) {
 
         }
         catch(err){
-            res.status(400).send('Error in finding given question');
+            res.status(400).json({"success": false, "message":"Error in finding question " + err});
 
         }
     }
     catch(err){
-        res.status(400).send('Error in finding the question ' + err);
+        res.status(400).json({"success": false, "message":"Error in finding question " + err});
     }
 
 }
@@ -213,10 +210,10 @@ exports.delete_question = async function (req, res) {
 
     try{
         await Question.findOneAndDelete({question:question, asked_by:asked_by});
-        res.status(200).send('Question deleted successfully');
+        res.status(200).json({"success": true, "message":"Question deleted"});
     }
     catch(err) {
-        res.status(400).send('Error  while deleting the question ' + err);
+        res.status(400).json({"success": false, "message":"Error in deleting question " + err});
     }
 
 
@@ -249,10 +246,10 @@ exports.delete_answer = async function (req, res) {
                 const updated = await Question.findByIdAndUpdate({_id:question_id}, {$set:{answers:answers_array}});     
     
                 if(updated){
-                    res.status(200).send('Answer Deleted Successfullyy');
+                    res.status(200).json({"success": true, "message":"Deleted answer"});
                 } 
                 else{
-                    res.status(400).send('Error');
+                    res.status(400).json({"success": false, "message":"Error in deleting question"});
                 }
             } else{
                 let answer = await Answer.findOne({doctor_id:doctor_id, question_id:question_id});
@@ -262,11 +259,11 @@ exports.delete_answer = async function (req, res) {
                 //Answer found in answers_database
                 if(answer){
                     await Answer.findOneAndDelete({doctor_id:doctor_id, question_id:question_id});
-                    res.status(200).send('Answer Deleted Successfully');
+                    res.status(200).json({"success": true, "message":"Deleted answer"});
                     
                 } 
                 else{
-                    res.status(400).send('Error in finding answer');
+                    res.status(400).json({"success": false, "message":"Error in deleting question"});
 
                 }
                 
@@ -274,12 +271,12 @@ exports.delete_answer = async function (req, res) {
 
         }
         catch(err){
-            res.status(400).send('Error in finding given question');
+            res.status(400).json({"success": false, "message":"Error in deleting question"});
 
         }
     }
     catch(err){
-        res.status(400).send('Error in finding the question ' + err);
+        res.status(400).json({"success": false, "message":"Error in deleting question"});
     }
 
 }

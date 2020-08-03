@@ -36,7 +36,7 @@ exports.edit_profile =  async function (req, res) {
 
     }
 
-    res.status(200).send("User updated successfully");
+    res.status(200).json({"success": true, "message":"User updated"});
 
 };
 
@@ -59,7 +59,7 @@ exports.save_user_data =  async function (req, res) {
         User.findOneAndUpdate({_id:req.params.id}, {$set:{gender:gender}}).exec()
     }
 
-    res.status(200).send("User data saved successfully");
+    res.status(200).json({"success": true, "message":"User updated"});
 
 }
 
@@ -95,10 +95,10 @@ exports.set_medical_condition =  async function (req, res) {
 
     try {
         await condition.save();
-        res.status(200).send('Medical condition saved');
+        res.status(200).json({"success": true, "message":"Medical Condition saved"});
 
     } catch (err) {
-        res.status(400).send(err);
+        res.status(400).json({"success": false, "message":"Error in saving medical condition"});
         console.log("Error in saving medical condition " + err);
     }
 
@@ -109,9 +109,8 @@ exports.get_medical_conditions = async function (req, res){
     await MedicalCondition.find({user_id:req.params.id, is_user:true}).exec()
     .then(user => {
         res.status(200).send(user)
-    }).catch( err => res.status(400).send('Error in getting medical conditions ' + err));
+    }).catch( err => res.status(400).json({"success": false, "message":"Error in saving medical condition"}))}
 
-}
 
 // Get user's circle
 exports.get_user_circle =  async function (req, res){
@@ -122,14 +121,13 @@ exports.get_user_circle =  async function (req, res){
     if(name && type){
         await MedicalCondition.find({user_id:req.params.id, is_user:false, name:name, type:type}).exec()
         .then(circle => res.status(200).json(circle))
-        .catch(err => res.status(400).send("Can't fetch " + err));
-    }
+        .catch( err => res.status(400).json({"success": false, "message":"Can't fetch " + err}))}    
     else{
         await MedicalCondition.find({user_id:req.params.id, is_user:false}).exec()
         .then(circle => res.status(200).json(circle))
-        .catch(err => res.status(400).send("Can't fetch " + err));
-    }
-
-    
+        .catch( err => res.status(400).json({"success": false, "message":"Can't fetch " + err}))
+    }    
 }
+
+
 

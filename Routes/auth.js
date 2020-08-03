@@ -9,7 +9,6 @@ const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN
  * LOCAL AUTHENTICATION 
  * 
 */
-
 //SIGNUP
 router.post('/signup', AuthController.signup_user);
 
