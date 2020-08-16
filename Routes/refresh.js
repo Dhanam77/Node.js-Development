@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const RefreshController = require('../Controllers/refreshcontroller');
+const VerifyToken = require('../VerifyToken')
 
 //This endpoint is used to get new access token after it has expired
 router.get('/refresh', VerifyToken,RefreshController.get_access_token);
