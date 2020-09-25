@@ -16,9 +16,5 @@ router.get('/search', VerifyToken, async function (req, res) {
        .catch( err => res.status(400).json({"success": false, "message":"Error in getting search results " + err}))
 
 });
-
-
-
-
 module.exports = router;
 

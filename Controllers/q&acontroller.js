@@ -52,10 +52,8 @@ exports.post_answer = async function (req, res) {
         //Question and asked_by is used to find question_id
         const question = req.body.question;
         const asked_by = req.body.asked_by;
-
         const answer = req.body.answer;
         const doctor_id = req.body.answered_by;
-        
         try{
             //Find the question which is to be answered
             const question_object = await Question.findOne({question:question, asked_by:asked_by});

@@ -26,7 +26,7 @@ router.get('/doctor/:id',VerifyToken, async function (req, res){
 
 
 //Route to make the user a doctor
-router.post('/doctor/:id', async function (req, res)  {
+router.post('/doctor/:id', VerifyToken, async function (req, res)  {
     const id = req.params.id;
 
     await User.findOneAndUpdate({_id:id}, {$set:{type:doctor}}, {upsert:true}).exec()
@@ -35,10 +35,6 @@ router.post('/doctor/:id', async function (req, res)  {
         }).catch(err => {
             res.status(400).send('Error '  + err);
         });
-
-   
-
 })
-
 
 module.exports = router;

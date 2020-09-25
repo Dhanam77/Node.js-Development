@@ -28,11 +28,9 @@ exports.signup_user = async function (req, res) {
             res.status(400).json({"success": false, "message":"Email already registered"});
     }
 
-
     //Hash Passwords
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);
-
 
     //create new user
     const user = new User({
@@ -42,7 +40,6 @@ exports.signup_user = async function (req, res) {
         type:req.body.type,
         state: req.body.state,
         city:req.body.city
-
     });
 
     try {
@@ -104,9 +101,6 @@ exports.login_user =  async function (req, res){
     const refreshToken = jwt.sign({_id:emailExist._id}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:refreshTokenExpiresIn})
 
     saveToken(refreshToken, emailExist._id);
-
-
-
     res.status(200).send({user: emailExist._id, token: token, refreshToken: refreshToken});
 
     //res.header('auth-token', token).send(token);

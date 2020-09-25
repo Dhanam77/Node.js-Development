@@ -3,6 +3,7 @@ const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const passport = require('passport');
+//const translate = require('google-translate-api');
 
 //require('./config/passport');
 
@@ -107,8 +108,7 @@ async function verify(token) {
 
 }
 */
-const PORT = process.env.PORT || 3000
-
+const PORT = process.env.PORT || 3000;
 
 app.get('/', function (req, res) {
     res.send(`If you're reading this, consider yourself lucky`);
